@@ -1,0 +1,46 @@
+cradle:
+  stack:
+    - path: "./src/Main.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Config.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Database.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Network.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/Actions.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/AddChannel.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/ChannelList.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/Job.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/KeybindingsIndicator.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/Name.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/Splittable.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/State.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Tui/VideoList.hs"
+      component: "youbrick:exe:youbrick"
+
+    - path: "./src/Paths_youbrick.hs"
+      component: "youbrick:exe:youbrick"

@@ -1,0 +1,42 @@
+name:                youbrick
+version:             0.1.0
+synopsis:            Terminal feed aggregator and launcher for Youtube channels
+github:              florentc/youbrick
+license:             GPL-3.0-or-later
+author:              Florent Ch.
+copyright:           (c) 2021 Florent Ch.
+category:            Web
+description: |
+  An application with a convenient terminal user interface to get notified about,
+  and view new content from Youtube channels without a google account. This
+  relies on the RSS feeds associated to each channel. The TUI is powered by the
+  haskell Brick library.
+extra-source-files:
+- README.md
+- screenshots/*.png
+
+dependencies:
+  - base >= 4.7 && < 5
+  - text
+  - bytestring
+  - containers
+  - exceptions
+  - time
+  - filepath
+  - directory
+  - process
+  - microlens-platform
+  - ixset-typed
+  - feed
+  - http-conduit
+  - http-types
+  - tagsoup
+  - vty
+  - brick
+
+executables:
+  youbrick:
+    main:             Main.hs
+    source-dirs:      src
+    ghc-options:
+      - -threaded

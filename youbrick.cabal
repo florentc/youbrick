@@ -1,0 +1,73 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           youbrick
+version:        0.1.0
+synopsis:       Terminal feed aggregator and launcher for Youtube channels
+description:    An application with a convenient terminal user interface to get notified about,
+                and view new content from Youtube channels without a google account. This
+                relies on the RSS feeds associated to each channel. The TUI is powered by the
+                haskell Brick library.
+category:       Web
+homepage:       https://github.com/florentc/youbrick#readme
+bug-reports:    https://github.com/florentc/youbrick/issues
+author:         Florent Ch.
+maintainer:     Florent Ch.
+copyright:      (c) 2021 Florent Ch.
+license:        GPL-3.0-or-later
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    screenshots/add-channel.png
+    screenshots/channel-content.png
+    screenshots/channel-list.png
+    screenshots/illustration.png
+    screenshots/watchlist.png
+
+source-repository head
+  type: git
+  location: https://github.com/florentc/youbrick
+
+executable youbrick
+  main-is: Main.hs
+  other-modules:
+      Config
+      Database
+      Network
+      Tui
+      Tui.Actions
+      Tui.AddChannel
+      Tui.ChannelList
+      Tui.Job
+      Tui.KeybindingsIndicator
+      Tui.Name
+      Tui.Splittable
+      Tui.State
+      Tui.VideoList
+      Paths_youbrick
+  hs-source-dirs:
+      src
+  ghc-options: -threaded
+  build-depends:
+      base >=4.7 && <5
+    , brick
+    , bytestring
+    , containers
+    , directory
+    , exceptions
+    , feed
+    , filepath
+    , http-conduit
+    , http-types
+    , ixset-typed
+    , microlens-platform
+    , process
+    , tagsoup
+    , text
+    , time
+    , vty
+  default-language: Haskell2010
