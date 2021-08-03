@@ -15,7 +15,7 @@ An application with a convenient Terminal User Interface (TUI) to subscribe, get
     - Watchlist of latest unseen content
 - Open in video viewer (e.g mpv or vlc) or in web browser
 - Manually toggle watch status
-- Locally subscribe to a channel by coping any URL linking to a webpage of that channel (including any video on the channel)
+- Locally subscribe to a channel by copying any URL of a webpage of that channel
 
 ## Motivations
 
@@ -36,7 +36,7 @@ This project does not aim, at first, to be a ready for release and long-term mai
 
 ### Configuration
 
-The video player and the web browser used to "watch" and "browse" channels and videos are specified in the `Config` module (by default "mpv" and "firefox"). They should be configured before building Youbrick.
+The video player and the web browser used to "watch" and "browse" channels and videos are specified in the `Config` module (by default `mpv` and `firefox`). They should be configured before building Youbrick.
 
 ### Building
 
@@ -44,7 +44,7 @@ Build with `stack`.
 
 ### Usage
 
-No arguments are expected when launching Youbrick. Keybindings are displayed on screen. First add a few channels ("middle-click" paste any video or channel page URL in the add channel dialog box). The database (subscribed channels and which videos have been watched) is saved (only when exiting the program normally) in a persistent file whose location is also specified in the `Config` module.
+No arguments are expected when launching Youbrick. Keybindings are displayed on screen. First add a few channels ("middle-click" paste any video or channel page URL in the add channel dialog box). The database (subscribed channels and which videos have been watched) is saved (only when exiting the program normally) in a persistent file (by default `database`) located in a subdirectory (by default `youbrick`) of the `XDG_DATA_HOME` directory (by default `~/.local/share` according to the [freedesktop.org XDG base directory specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)).
 
 Refresh to fetch latest content about subscribed channels online. Refreshing is not automatic. Dismiss error messages (e.g. invalid URL when adding a channel or connection issue) by pressing Enter.
 
