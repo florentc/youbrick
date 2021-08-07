@@ -22,7 +22,8 @@ import Data.Maybe (mapMaybe)
 import qualified Data.Text as Text
 import Data.Set (Set)
 import qualified Data.Set as Set
-import Data.List (sort)
+import Data.List (sortBy)
+import Data.Ord (Down (Down))
 
 import Brick.Types (Widget, EventM)
 import qualified Brick.Widgets.Core as Brick
@@ -42,17 +43,23 @@ import qualified Tui.Name as Name
 data Item = Item
   { _channel :: D.Channel -- ^ The channel
   , _unseenCount :: Int -- ^ Number of unseen videos to display in the interface
-  , _latestNotWatchedVideo :: Maybe D.Video -- ^ Latest video to order by date
+  , _latestNotWatchedVideo :: Maybe D.Video -- ^ Latest unseen video to order by date
+  , _latestVideo :: Maybe D.Video -- ^ Latest video to order by date
   , _updating :: Bool -- ^ Whether new info about the channel is being fetched online
   }
 
 instance Eq Item where
-  (Item c _ _ _) == (Item c' _ _ _) = D.channelId c == D.channelId c'
+  (Item c _ _ _ _) == (Item c' _ _ _ _) = D.channelId c == D.channelId c'
 
--- | Order channels by latest video publication date
-instance Ord Item where
-  (Item _ _ v _) <= (Item _ _ v' _) =
-    (D.publicationTime <$> v) >= (D.publicationTime <$> v')
+-- | Compare channels by latest video publication date, prioritizing unseen
+-- videos.
+compareByDate :: Item -> Item -> Ordering
+compareByDate (Item _ _ Nothing mV1 _) (Item _ _ Nothing mV2 _) =
+  compare (Down $ D.publicationTime <$> mV1) (Down $ D.publicationTime <$> mV2)
+compareByDate (Item _ _ Nothing _ _) (Item _ _ (Just _) _ _) = GT
+compareByDate (Item _ _ (Just _) _ _) (Item _ _ Nothing _ _) = LT
+compareByDate (Item _ _ (Just v1) _ _) (Item _ _ (Just v2) _ _) =
+  compare (Down $ D.publicationTime v1) (Down $ D.publicationTime v2)
 
 -- | Widget for channel lists
 type WidgetChannelList = Brick.GenericList Name [] Item
@@ -68,6 +75,7 @@ item db updatingChannels cid = do
     c
     (Set.size (D.lookupNotWatchedOnChannel cid db))
     (D.lookupLatestNotWatchedVideoOnChannel cid db)
+    (D.lookupLatestVideoOnChannel cid db)
     (Set.member cid updatingChannels)
 
 -- | Generate a new brick widget associated to the channels in the database. A
@@ -77,7 +85,8 @@ new :: D.Database -> Set D.ChannelId -> WidgetChannelList
 new db updatingChannels =
   Brick.list
   Name.ChannelList
-  (sort $ mapMaybe (item db updatingChannels) (Set.toList $ D.channelIds db))
+  (sortBy compareByDate $
+    mapMaybe (item db updatingChannels) (Set.toList $ D.channelIds db))
   1
 
 -- | Update an existing channel list widget. That is generate a new one with
@@ -94,7 +103,7 @@ update db updatingChannels list =
 -- line with the number of unseen videos, an icon for new content and updating
 -- status, and the title of the channel.
 drawItem :: Item -> Widget Name
-drawItem (Item c n v u) =
+drawItem (Item c n _ _ u) =
   Brick.txt
   ( if n > 0 then (if n < 10 then " " else "")
   <> (Text.pack . show $ n) else "  ")
