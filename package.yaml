@@ -1,5 +1,5 @@
 name:                youbrick
-version:             0.1.0
+version:             1.0.0
 synopsis:            Terminal feed aggregator and launcher for Youtube channels
 github:              florentc/youbrick
 license:             GPL-3.0-or-later

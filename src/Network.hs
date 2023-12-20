@@ -46,8 +46,12 @@ data NoChannelIdException = NoChannelIdException deriving (Show)
 
 instance Exception NoChannelIdException
 
--- | Fetch the internal id of a channel from a webpage (e.g. specific video,
--- channel home, etc.) which is located in a dedicated metadata tag.
+-- | Fetch the internal id of a channel from a the URL to the channel homepage.
+-- WARN There used to be, in v0.1, a dedicated "channelId" metadata tag on
+-- every webpage related to a channel (e.g. channel home or a video). It no
+-- longer exists. Now the channel id is extracted from the "identifier"
+-- metadata tag of the channel home. Videos have a similar tag but it contains
+-- the video id. Therefore, using a video URL to add a channel no longer works.
 extractChannelId :: (MonadThrow m, MonadIO m) => D.URL -> m D.ChannelId
 extractChannelId url = do
   request <- Http.parseRequestThrow (Text.unpack url)
@@ -55,7 +59,7 @@ extractChannelId url = do
   let tags = Html.parseTags (Http.getResponseBody response)
       channelIdTag =
         find
-          (Html.tagOpen (== "meta") (elem ("itemprop", "channelId")))
+          (Html.tagOpen (== "meta") (elem ("itemprop", "identifier")))
           tags
    in case Text.pack . Char8.unpack <$> (channelIdTag >>= maybeAttrib "content") of
         Nothing -> throwM NoChannelIdException
